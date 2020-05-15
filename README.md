@@ -1,12 +1,7 @@
-# ![nf-core/covidngsanalysis](docs/images/nf-core-covidngsanalysis_logo.png)
+# sc2-ngs-analysis
 
 **Produce analysis files for genomes from sc2-msspe-bioinfo**.
 
-[![Build Status](https://travis-ci.com/nf-core/covidngsanalysis.svg?branch=master)](https://travis-ci.com/nf-core/covidngsanalysis)
-[![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A50.32.0-brightgreen.svg)](https://www.nextflow.io/)
-
-[![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg)](http://bioconda.github.io/)
-[![Docker](https://img.shields.io/docker/automated/nfcore/covidngsanalysis.svg)](https://hub.docker.com/r/nfcore/covidngsanalysis)
 
 ## Introduction
 
@@ -18,24 +13,26 @@ i. Install [`nextflow`](https://nf-co.re/usage/installation)
 
 ii. Install one of [`docker`](https://docs.docker.com/engine/installation/), [`singularity`](https://www.sylabs.io/guides/3.0/user-guide/) or [`conda`](https://conda.io/miniconda.html)
 
-iii. Download the pipeline and test it on a minimal dataset with a single command
+iii. Download the pipeline and test it on a minimal dataset with a single command (nextstrain metadata needs to be downloaded from GISAID)
 
 ```bash
-nextflow run nf-core/covidngsanalysis -profile test,<docker/singularity/conda>
+nextflow run main.nf -profile test,<docker/conda> --nextstrain_metadata metadata_yyyy-mm-dd.tsv
 ```
 
 iv. Start running your own analysis!
 
 <!-- TODO nf-core: Update the default command above used to run the pipeline -->
 ```bash
-nextflow run nf-core/covidngsanalysis -profile <docker/singularity/conda> --reads '*_R{1,2}.fastq.gz' --genome GRCh37
+nextflow run main.nf -profile <docker/conda> --sample_sequences '*.fa' --sample_metadeta sample_metadeta.tsv --nextstrain_sequences sequences_yyyy-mm-dd.fasta --blast_sequences sequences_yy-mm-dd.fasta --nextstrain_metadata metadata_yyyy-mm-dd.tsv
 ```
 
 See [usage docs](docs/usage.md) for all of the available options when running the pipeline.
 
 ## Documentation
 
-The nf-core/covidngsanalysis pipeline comes with documentation about the pipeline, found in the `docs/` directory:
+__DOCUMENTATION IS CURRENTLY UNDER CONSTRUCTION__
+
+The czbiohub/sc2-ngs-analysis pipeline comes with documentation about the pipeline, found in the `docs/` directory:
 
 1. [Installation](https://nf-co.re/usage/installation)
 2. Pipeline configuration
@@ -50,18 +47,16 @@ The nf-core/covidngsanalysis pipeline comes with documentation about the pipelin
 
 ## Credits
 
-nf-core/covidngsanalysis was originally written by Samantha Hao, Jack Kamm.
+czbiohub/sc2-ngs-analysis was originally written by Samantha Hao, Jack Kamm.
 
 ## Contributions and Support
 
-If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
-
-For further information or help, don't hesitate to get in touch on [Slack](https://nfcore.slack.com/channels/nf-core/covidngsanalysis) (you can join with [this invite](https://nf-co.re/join/slack)).
+If you would like to contribute to this pipeline, please contact the authors.
 
 ## Citation
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi. -->
-<!-- If you use  nf-core/covidngsanalysis for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
+<!-- If you use  czbiohub/sc2-ngs-analysis for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
 
 You can cite the `nf-core` pre-print as follows:  
 Ewels PA, Peltzer A, Fillinger S, Alneberg JA, Patel H, Wilm A, Garcia MU, Di Tommaso P, Nahnsen S. **nf-core: Community curated bioinformatics pipelines**. *bioRxiv*. 2019. p. 610741. [doi: 10.1101/610741](https://www.biorxiv.org/content/10.1101/610741v1).

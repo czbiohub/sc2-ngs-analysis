@@ -1,6 +1,6 @@
-# nf-core/covidngsanalysis: Documentation
+# czbiohub/sc2-ngs-analysis: Documentation
 
-The nf-core/covidngsanalysis documentation is split into the following files:
+The czbiohub/sc2-ngs-analysis documentation is split into the following files:
 
 1. [Installation](https://nf-co.re/usage/installation)
 2. Pipeline configuration

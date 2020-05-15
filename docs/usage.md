@@ -1,4 +1,6 @@
-# nf-core/covidngsanalysis: Usage
+# czbiohub/sc2-ngs-analysis: Usage
+
+__DOCUMENTATION IS CURRENTLY UNDER CONSTRUCTION__
 
 ## Table of contents
 
