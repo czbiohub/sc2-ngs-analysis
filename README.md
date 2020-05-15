@@ -30,7 +30,9 @@ See [usage docs](docs/usage.md) for all of the available options when running th
 
 ## Documentation
 
-The nf-core/covidngsanalysis pipeline comes with documentation about the pipeline, found in the `docs/` directory:
+__DOCUMENTATION IS CURRENTLY UNDER CONSTRUCTION__
+
+The czbiohub/sc2-ngs-analysis pipeline comes with documentation about the pipeline, found in the `docs/` directory:
 
 1. [Installation](https://nf-co.re/usage/installation)
 2. Pipeline configuration
@@ -45,18 +47,16 @@ The nf-core/covidngsanalysis pipeline comes with documentation about the pipelin
 
 ## Credits
 
-nf-core/covidngsanalysis was originally written by Samantha Hao, Jack Kamm.
+czbiohub/sc2-ngs-analysis was originally written by Samantha Hao, Jack Kamm.
 
 ## Contributions and Support
 
-If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
-
-For further information or help, don't hesitate to get in touch on [Slack](https://nfcore.slack.com/channels/nf-core/covidngsanalysis) (you can join with [this invite](https://nf-co.re/join/slack)).
+If you would like to contribute to this pipeline, please contact the authors.
 
 ## Citation
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi. -->
-<!-- If you use  nf-core/covidngsanalysis for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
+<!-- If you use  czbiohub/sc2-ngs-analysis for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
 
 You can cite the `nf-core` pre-print as follows:  
 Ewels PA, Peltzer A, Fillinger S, Alneberg JA, Patel H, Wilm A, Garcia MU, Di Tommaso P, Nahnsen S. **nf-core: Community curated bioinformatics pipelines**. *bioRxiv*. 2019. p. 610741. [doi: 10.1101/610741](https://www.biorxiv.org/content/10.1101/610741v1).
