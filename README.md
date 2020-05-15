@@ -13,7 +13,7 @@ i. Install [`nextflow`](https://nf-co.re/usage/installation)
 
 ii. Install one of [`docker`](https://docs.docker.com/engine/installation/), [`singularity`](https://www.sylabs.io/guides/3.0/user-guide/) or [`conda`](https://conda.io/miniconda.html)
 
-iii. Download the pipeline and test it on a minimal dataset with a single command
+iii. Download the pipeline and test it on a minimal dataset with a single command (nextstrain metadata needs to be downloaded from GISAID)
 
 ```bash
 nextflow run main.nf -profile test,<docker/conda> --nextstrain_metadata metadata_yyyy-mm-dd.tsv
