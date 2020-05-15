@@ -1,12 +1,7 @@
-# ![nf-core/covidngsanalysis](docs/images/nf-core-covidngsanalysis_logo.png)
+# sc2-ngs-analysis
 
 **Produce analysis files for genomes from sc2-msspe-bioinfo**.
 
-[![Build Status](https://travis-ci.com/nf-core/covidngsanalysis.svg?branch=master)](https://travis-ci.com/nf-core/covidngsanalysis)
-[![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A50.32.0-brightgreen.svg)](https://www.nextflow.io/)
-
-[![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg)](http://bioconda.github.io/)
-[![Docker](https://img.shields.io/docker/automated/nfcore/covidngsanalysis.svg)](https://hub.docker.com/r/nfcore/covidngsanalysis)
 
 ## Introduction
 
@@ -21,14 +16,14 @@ ii. Install one of [`docker`](https://docs.docker.com/engine/installation/), [`s
 iii. Download the pipeline and test it on a minimal dataset with a single command
 
 ```bash
-nextflow run nf-core/covidngsanalysis -profile test,<docker/singularity/conda>
+nextflow run main.nf -profile test,<docker/conda> --nextstrain_metadata metadata_yyyy-mm-dd.tsv
 ```
 
 iv. Start running your own analysis!
 
 <!-- TODO nf-core: Update the default command above used to run the pipeline -->
 ```bash
-nextflow run nf-core/covidngsanalysis -profile <docker/singularity/conda> --reads '*_R{1,2}.fastq.gz' --genome GRCh37
+nextflow run main.nf -profile <docker/conda> --sample_sequences '*.fa' --sample_metadeta sample_metadeta.tsv --nextstrain_sequences sequences_yyyy-mm-dd.fasta --blast_sequences sequences_yy-mm-dd.fasta --nextstrain_metadata metadata_yyyy-mm-dd.tsv
 ```
 
 See [usage docs](docs/usage.md) for all of the available options when running the pipeline.

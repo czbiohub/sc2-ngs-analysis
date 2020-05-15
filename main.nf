@@ -136,10 +136,10 @@ checkHostname()
 def create_workflow_summary(summary) {
     def yaml_file = workDir.resolve('workflow_summary_mqc.yaml')
     yaml_file.text  = """
-    id: 'nf-core-covidngsanalysis-summary'
+    id: 'sc2-ngs-analysis-summary'
     description: " - this information is collected when the pipeline is started."
-    section_name: 'nf-core/covidngsanalysis Workflow Summary'
-    section_href: 'https://github.com/nf-core/covidngsanalysis'
+    section_name: 'czbiohub/sc2-ngs-analysis Workflow Summary'
+    section_href: 'https://github.com/czbiohub/sc2-ngs-analysis'
     plot_type: 'html'
     data: |
         <dl class=\"dl-horizontal\">
@@ -600,9 +600,9 @@ process combineInclude {
 workflow.onComplete {
 
     // Set up the e-mail variables
-    def subject = "[nf-core/covidngsanalysis] Successful: $workflow.runName"
+    def subject = "[czbiohub/sc2-ngs-analysis] Successful: $workflow.runName"
     if (!workflow.success) {
-      subject = "[nf-core/covidngsanalysis] FAILED: $workflow.runName"
+      subject = "[czbiohub/sc2-ngs-analysis] FAILED: $workflow.runName"
     }
     def email_fields = [:]
     email_fields['version'] = workflow.manifest.version
@@ -658,11 +658,11 @@ workflow.onComplete {
           if ( params.plaintext_email ){ throw GroovyException('Send plaintext e-mail, not HTML') }
           // Try to send HTML e-mail using sendmail
           [ 'sendmail', '-t' ].execute() << sendmail_html
-          log.info "[nf-core/covidngsanalysis] Sent summary e-mail to $email_address (sendmail)"
+          log.info "[czbiohub/sc2-ngs-analysis] Sent summary e-mail to $email_address (sendmail)"
         } catch (all) {
           // Catch failures and try with plaintext
           [ 'mail', '-s', subject, email_address ].execute() << email_txt
-          log.info "[nf-core/covidngsanalysis] Sent summary e-mail to $email_address (mail)"
+          log.info "[czbiohub/sc2-ngs-analysis] Sent summary e-mail to $email_address (mail)"
         }
     }
 
@@ -688,10 +688,10 @@ workflow.onComplete {
     }
 
     if (workflow.success) {
-        log.info "${c_purple}[nf-core/covidngsanalysis]${c_green} Pipeline completed successfully${c_reset}"
+        log.info "${c_purple}[czbiohub/sc2-ngs-analysis]${c_green} Pipeline completed successfully${c_reset}"
     } else {
         checkHostname()
-        log.info "${c_purple}[nf-core/covidngsanalysis]${c_red} Pipeline completed with errors${c_reset}"
+        log.info "${c_purple}[czbiohub/sc2-ngs-analysis]${c_red} Pipeline completed with errors${c_reset}"
     }
 
 }
