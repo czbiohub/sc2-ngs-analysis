@@ -23,7 +23,7 @@ iv. Start running your own analysis!
 
 <!-- TODO nf-core: Update the default command above used to run the pipeline -->
 ```bash
-nextflow run main.nf -profile <docker/conda> --sample_sequences '*.fa' --sample_metadeta sample_metadeta.tsv --nextstrain_sequences sequences_yyyy-mm-dd.fasta --blast_sequences sequences_yy-mm-dd.fasta --nextstrain_metadata metadata_yyyy-mm-dd.tsv
+nextflow run main.nf -profile <docker/conda> --sample_sequences '*.fa' --sample_metadata sample_metadata.tsv --nextstrain_sequences sequences_yyyy-mm-dd.fasta --blast_sequences sequences_yy-mm-dd.fasta --nextstrain_metadata metadata_yyyy-mm-dd.tsv
 ```
 
 See [usage docs](docs/usage.md) for all of the available options when running the pipeline.
@@ -38,7 +38,6 @@ The czbiohub/sc2-ngs-analysis pipeline comes with documentation about the pipeli
 2. Pipeline configuration
     * [Local installation](https://nf-co.re/usage/local_installation)
     * [Adding your own system config](https://nf-co.re/usage/adding_own_config)
-    * [Reference genomes](https://nf-co.re/usage/reference_genomes)
 3. [Running the pipeline](docs/usage.md)
 4. [Output and how to interpret the results](docs/output.md)
 5. [Troubleshooting](https://nf-co.re/usage/troubleshooting)
@@ -47,7 +46,7 @@ The czbiohub/sc2-ngs-analysis pipeline comes with documentation about the pipeli
 
 ## Credits
 
-czbiohub/sc2-ngs-analysis was originally written by Samantha Hao, Jack Kamm.
+czbiohub/sc2-ngs-analysis was originally written by Samantha Hao and Jack Kamm.
 
 ## Contributions and Support
 
