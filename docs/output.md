@@ -2,23 +2,36 @@
 
 __DOCUMENTATION UNDER CONSTRUCTION__
 
-This document describes the output produced by the pipeline. Most of the plots are taken from the MultiQC report, which summarises results at the end of the pipeline.
+This document describes the output produced by the pipeline. 
 
-<!-- TODO nf-core: Write this documentation describing your workflow's output -->
+<!-- MarkdownTOC -->
+
+- [Pipeline overview](#pipeline-overview)
+- [Alignment to reference](#alignment-to-reference)
+- [MultiQC](#multiqc)
+
+<!-- /MarkdownTOC -->
 
 ## Pipeline overview
 The pipeline is built using [Nextflow](https://www.nextflow.io/)
 and processes data using the following steps:
 
-* [FastQC](#fastqc) - read quality control
-* [MultiQC](#multiqc) - aggregate report, describing results of the whole pipeline
+* Minimap2 - Align to reference
+* Bcftools - Call variants
+* [`assignclades.py`](../bin/assignclades.py) - Assign clades
+* Bcftools - Search primer regions for variants
+* BLAST - Find most similar sequences
+* [`alignment_assembly_stats.py`](../bin/alignment_assembly_stats.py) - Per sample statistics
+* Merge assemblies
+* Merge stats
+* Filter assemblies
+* Rename assemblies
+* Combine sequences
+* Combine metadata
+* Get CA sequences
+* Make include file
 
-## FastQC
-[FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) gives general quality metrics about your reads. It provides information about the quality score distribution across your reads, the per base sequence content (%T/A/G/C). You get information about adapter contamination and other overrepresented sequences.
-
-For further reading and documentation see the [FastQC help](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/).
-
-> **NB:** The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They may contain adapter sequence and potentially regions with low quality. To see how your reads look after trimming, look at the FastQC reports in the `trim_galore` directory.
+## Alignment to reference
 
 **Output directory: `results/fastqc`**
 
