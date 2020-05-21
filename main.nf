@@ -490,12 +490,12 @@ process renameAssemblies {
   rename_samples.py --in_fa ${in_fa} --gisaid_names ${gisaid_names}
   """
 }
-if (params.gisaid_names) {
-  nextstrain_ch = renamed_asm
+if (!params.gisaid_names) {
+  renamed_asm = nextstrain_ch
 }
 
 // Put sample and contextual sequences into one channel
-nextstrain_ch
+renamed_asm
   .mix(contextual_fastas_ch)
   .collect()
   .set {sample_and_contextual_ch}
@@ -512,7 +512,7 @@ process combineSequences {
     publishDir "${params.outdir}/nextstrain/data", mode: 'copy'
 
     input:
-    path(sample_sequences) from nextstrain_ch
+    path(sample_sequences) from renamed_asm
     path(nextstrain_sequences)
     
     output:
@@ -583,7 +583,7 @@ process combineInclude {
 
     input:
     path(include_file)
-    path(sample_sequences) from nextstrain_ch
+    path(sample_sequences) from renamed_asm
     path(blast_fastas) from included_fastas_ch
     path(CA_sequences)
 
