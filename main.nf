@@ -151,31 +151,6 @@ ${summary.collect { k,v -> "            <dt>$k</dt><dd><samp>${v ?: '<span style
 }
 
 /*
- * Parse software version numbers
- */
-process get_software_versions {
-    publishDir "${params.outdir}/pipeline_info", mode: 'copy',
-        saveAs: { filename ->
-            if (filename.indexOf(".csv") > 0) filename
-            else null
-        }
-
-    output:
-    file 'software_versions_mqc.yaml' into software_versions_yaml
-    file "software_versions.csv"
-
-    script:
-    // TODO nf-core: Get all tools to print their version number here
-    """
-    echo $workflow.manifest.version > v_pipeline.txt
-    echo $workflow.nextflow.version > v_nextflow.txt
-    fastqc --version > v_fastqc.txt
-    multiqc --version > v_multiqc.txt
-    scrape_software_versions.py &> software_versions_mqc.yaml
-    """
-}
-
-/*
  * STEP 1 - Realign consensus genome
  */
 process realignConsensus {
@@ -573,7 +548,35 @@ process combineMetadata {
 }
 
 /*
- * STEP 16 - MAKE NEXTSTRAIN INCLUDE FILE
+ * STEP 16 - GET CA SEQUENCES
+ */
+process getCASequences {
+  publishDir "${params.outdir}/nextstrain/config", mode: 'copy'
+
+  input:
+  path(nextstrain_metadata)
+  path(nextstrain_sequences)
+
+  output:
+  path("CA_sequences.txt") into CA_sequences
+
+  script:
+  String exclude_where = "date='2020' date='2020-01-XX' date='2020-02-XX' date='2020-03-XX' date='2020-04-XX' date='2020-01' date='2020-02' date='2020-03' date='2020-04'"
+  """
+  augur filter \
+  --sequences ${nextstrain_sequences} \
+  --metadata ${nextstrain_metadata} \
+  --exclude-where ${exclude_where} \
+  --exclude-where 'division!=California' \
+  --min-length ${params.minLength} \
+  --output CA_sequences.fasta
+
+  cat CA_sequences.fasta | grep '>' | awk -F '>' '{print \$2}' > CA_sequences.txt
+  """
+}
+
+/*
+ * STEP 17 - MAKE NEXTSTRAIN INCLUDE FILE
  */
 process combineInclude {
     publishDir "${params.outdir}/nextstrain/config", mode: 'copy'
@@ -582,6 +585,7 @@ process combineInclude {
     path(include_file)
     path(sample_sequences) from nextstrain_ch
     path(blast_fastas) from included_fastas_ch
+    path(CA_sequences)
 
     output:
     path("include.txt")
@@ -590,7 +594,7 @@ process combineInclude {
     """
     cat ${blast_fastas} | grep '>' | awk -F '>' '{print \$2}' > blast_fastas.txt
     cat ${sample_sequences} | grep '>' | awk -F '>' '{print \$2}' > sample_sequences.txt
-    cat ${include_file} blast_fastas.txt sample_sequences.txt > include.txt
+    cat ${include_file} ${CA_sequences} blast_fastas.txt sample_sequences.txt > include.txt
     """
 }
 

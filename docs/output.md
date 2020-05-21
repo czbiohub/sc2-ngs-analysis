@@ -1,4 +1,6 @@
-# nf-core/covidngsanalysis: Output
+# czbiohub/sc2-ngs-analysis: Output
+
+__DOCUMENTATION UNDER CONSTRUCTION__
 
 This document describes the output produced by the pipeline. Most of the plots are taken from the MultiQC report, which summarises results at the end of the pipeline.
 

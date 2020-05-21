@@ -1,0 +1,6 @@
+strain	virus	date	region	country	division	location	region_exposure	country_exposure	division_exposure	segment	length	host	originating_lab	submitting_lab	authors	date_submitted
+nextstrain_sample3	ncov	2020-05-05	North America	USA	California	San Francisco	North America	USA	California	genome	29841	human	Chan-Zuckerberg Biohub	Chan-Zuckerberg Biohub	CZB Cliahub Consortium	2020-05-10
+nextstrain_sample2	ncov	2020-05-05	North America	USA	California	San Francisco	North America	USA	California	genome	3050	human	Chan-Zuckerberg Biohub	Chan-Zuckerberg Biohub	CZB Cliahub Consortium	2020-05-10
+nextstrain_sample5	ncov	2020-05-05	North America	USA	California	San Francisco	North America	USA	California	genome	29891	human	Chan-Zuckerberg Biohub	Chan-Zuckerberg Biohub	CZB Cliahub Consortium	2020-05-10
+nextstrain_sample1	ncov	2020-05-05	North America	USA	California	San Francisco	North America	USA	California	genome	29897	human	Chan-Zuckerberg Biohub	Chan-Zuckerberg Biohub	CZB Cliahub Consortium	2020-05-10
+nextstrain_sample4	ncov	2020-05-05	North America	USA	California	San Francisco	North America	USA	California	genome	29863	human	Chan-Zuckerberg Biohub	Chan-Zuckerberg Biohub	CZB Cliahub Consortium	2020-05-10

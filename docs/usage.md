@@ -1,46 +1,51 @@
 # czbiohub/sc2-ngs-analysis: Usage
 
-__DOCUMENTATION IS CURRENTLY UNDER CONSTRUCTION__
-
 ## Table of contents
+<!-- MarkdownTOC -->
 
-<!-- Install Atom plugin markdown-toc-auto for this ToC to auto-update on save -->
-<!-- TOC START min:2 max:3 link:true asterisk:true update:true -->
-* [Table of contents](#table-of-contents)
-* [Introduction](#introduction)
-* [Running the pipeline](#running-the-pipeline)
-  * [Updating the pipeline](#updating-the-pipeline)
-  * [Reproducibility](#reproducibility)
-* [Main arguments](#main-arguments)
-  * [`-profile`](#-profile)
-  * [`--reads`](#--reads)
-  * [`--singleEnd`](#--singleend)
-* [Reference genomes](#reference-genomes)
-  * [`--genome` (using iGenomes)](#--genome-using-igenomes)
-  * [`--fasta`](#--fasta)
-  * [`--igenomesIgnore`](#--igenomesignore)
-* [Job resources](#job-resources)
-  * [Automatic resubmission](#automatic-resubmission)
-  * [Custom resource requests](#custom-resource-requests)
-* [AWS Batch specific parameters](#aws-batch-specific-parameters)
-  * [`--awsqueue`](#--awsqueue)
-  * [`--awsregion`](#--awsregion)
-* [Other command line parameters](#other-command-line-parameters)
-  * [`--outdir`](#--outdir)
-  * [`--email`](#--email)
-  * [`--email_on_fail`](#--email_on_fail)
-  * [`-name`](#-name)
-  * [`-resume`](#-resume)
-  * [`-c`](#-c)
-  * [`--custom_config_version`](#--custom_config_version)
-  * [`--custom_config_base`](#--custom_config_base)
-  * [`--max_memory`](#--max_memory)
-  * [`--max_time`](#--max_time)
-  * [`--max_cpus`](#--max_cpus)
-  * [`--plaintext_email`](#--plaintext_email)
-  * [`--monochrome_logs`](#--monochrome_logs)
-  * [`--multiqc_config`](#--multiqc_config)
-<!-- TOC END -->
+- [Introduction](#introduction)
+- [Running the pipeline](#running-the-pipeline)
+  - [Updating the pipeline](#updating-the-pipeline)
+  - [Reproducibility](#reproducibility)
+- [Main arguments](#main-arguments)
+  - [`-profile`](#-profile)
+  - [`--sample_sequences`](#--sample_sequences)
+  - [`--sample_metadata`](#--sample_metadata)
+  - [`--blast_sequences`](#--blast_sequences)
+  - [`--nextstrain_sequences`](#--nextstrain_sequences)
+  - [`--nextstrain_metadata`](#--nextstrain_metadata)
+  - [`--minLength`](#--minlength)
+  - [`--maxNs`](#--maxns)
+  - [`--clades`](#--clades)
+  - [`--gisaid_names`](#--gisaid_names)
+  - [`--qpcr_primers`](#--qpcr_primers)
+  - [`--sample_vcfs`](#--sample_vcfs)
+- [Reference genomes](#reference-genomes)
+  - [`--ref`](#--ref)
+  - [`--ref_gb`](#--ref_gb)
+- [Job resources](#job-resources)
+  - [Automatic resubmission](#automatic-resubmission)
+  - [Custom resource requests](#custom-resource-requests)
+- [AWS Batch specific parameters](#aws-batch-specific-parameters)
+  - [`--awsqueue`](#--awsqueue)
+  - [`--awsregion`](#--awsregion)
+- [Other command line parameters](#other-command-line-parameters)
+  - [`--outdir`](#--outdir)
+  - [`--email`](#--email)
+  - [`--email_on_fail`](#--email_on_fail)
+  - [`-name`](#-name)
+  - [`-resume`](#-resume)
+  - [`-c`](#-c)
+  - [`--custom_config_version`](#--custom_config_version)
+  - [`--custom_config_base`](#--custom_config_base)
+  - [`--max_memory`](#--max_memory)
+  - [`--max_time`](#--max_time)
+  - [`--max_cpus`](#--max_cpus)
+  - [`--plaintext_email`](#--plaintext_email)
+  - [`--monochrome_logs`](#--monochrome_logs)
+  - [`--multiqc_config`](#--multiqc_config)
+
+<!-- /MarkdownTOC -->
 
 
 ## Introduction
@@ -58,7 +63,7 @@ NXF_OPTS='-Xms1g -Xmx4g'
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run nf-core/covidngsanalysis --reads '*_R{1,2}.fastq.gz' -profile docker
+nextflow run czbiohub/sc2-ngs-analysis -profile docker --sample_sequences '*.fa' --sample_metadeta sample_metadata.tsv --nextstrain_sequences sequences_yyyy-mm-dd.fasta --blast_sequences sequences_yy-mm-dd.fasta --nextstrain_metadata metadata_yyyy-mm-dd.tsv
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
@@ -76,13 +81,13 @@ results         # Finished results (configurable, see below)
 When you run the above command, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
 
 ```bash
-nextflow pull nf-core/covidngsanalysis
+nextflow pull czbiohub/sc2-ngs-analysis
 ```
 
 ### Reproducibility
 It's a good idea to specify a pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since.
 
-First, go to the [nf-core/covidngsanalysis releases page](https://github.com/nf-core/covidngsanalysis/releases) and find the latest version number - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`.
+First, go to the [czbiohub/sc2-ngs-analysis releases page](https://github.com/czbiohub/sc2-ngs-analysis/releases) and find the latest version number - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`.
 
 This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future.
 
@@ -95,94 +100,133 @@ Use this parameter to choose a configuration profile. Profiles can give configur
 If `-profile` is not specified at all the pipeline will be run locally and expects all software to be installed and available on the `PATH`.
 
 * `awsbatch`
-  * A generic configuration profile to be used with AWS Batch.
+  * A configuration profile to run the pipeline using AWS Batch, specific to CZB AWS.
 * `conda`
   * A generic configuration profile to be used with [conda](https://conda.io/docs/)
   * Pulls most software from [Bioconda](https://bioconda.github.io/)
 * `docker`
   * A generic configuration profile to be used with [Docker](http://docker.com/)
-  * Pulls software from dockerhub: [`nfcore/covidngsanalysis`](http://hub.docker.com/r/nfcore/covidngsanalysis/)
+  * Pulls software from dockerhub: [`czbiohub/sc2-msspe`](http://hub.docker.com/r/czbiohub/sc2-msspe/)
 * `singularity`
   * A generic configuration profile to be used with [Singularity](http://singularity.lbl.gov/)
-  * Pulls software from DockerHub: [`nfcore/covidngsanalysis`](http://hub.docker.com/r/nfcore/covidngsanalysis/)
+  * Pulls software from DockerHub: [`czbiohub/sc2-msspe`](http://hub.docker.com/r/czbiohub/sc2-msspe/)
 * `test`
   * A profile with a complete configuration for automated testing
-  * Includes links to test data so needs no other parameters
+  * Does not include `--nextstrain_metadata` due to GISAID restrictions, so this file must be provided.
 
 <!-- TODO nf-core: Document required command line parameters -->
 
-### `--reads`
-Use this to specify the location of your input FastQ files. For example:
+### `--sample_sequences`
+Use this to specify the location of your input SARS-CoV-2 sequence files. For example:
 
 ```bash
---reads 'path/to/data/sample_*_{1,2}.fastq'
+--sample_sequences 'path/to/data/sample_*.fa'
 ```
 
 Please note the following requirements:
 
 1. The path must be enclosed in quotes
 2. The path must have at least one `*` wildcard character
-3. When using the pipeline with paired end data, the path must use `{1,2}` notation to specify read pairs.
 
-If left unspecified, a default pattern is used: `data/*{1,2}.fastq.gz`
-
-### `--singleEnd`
-By default, the pipeline expects paired-end data. If you have single-end data, you need to specify `--singleEnd` on the command line when you launch the pipeline. A normal glob pattern, enclosed in quotation marks, can then be used for `--reads`. For example:
+### `--sample_metadata`
+Specify a file that contains the sample metadata, formatted to be compatible with Nextstrain. This file should specify sample collection dates.
 
 ```bash
---singleEnd --reads '*.fastq'
+--sample_metadata 'path/to/data/sample_metadata.tsv'
 ```
 
-It is not possible to run a mixture of single-end and paired-end files in one run.
+### `--blast_sequences`
+Specify a file that contains sequences to build a BLAST database. This is normally the same file as `--nextstrain_sequences`.
 
+```bash
+--blast_sequences 'path/to/data/sequences.fasta'
+```
+
+### `--nextstrain_sequences`
+Specify a file that contains the sequences that will be output into a file to be used as input for the `nextstrain/ncov` pipeline. This is normally the same file as `--blast_sequences`.
+
+```bash
+--nextstrain_sequences 'path/to/data/sequences.fasta'
+```
+
+### `--nextstrain_metadata`
+Specify the nextstrain metadata file, normally retrieved from GISAID. This is used to filter for California sequences and to build a new metadata file that contains the sample metadata.
+
+```bash
+--nextstrain_metadata 'path/to/data/metadata.tsv'
+```
+
+### `--minLength`
+Specify the minimum number of non-ambiguous/-missing/-gap characters needed for an assembly to pass filters.
+
+```bash
+--minLength 25000
+```
+
+By default, set to `25000` to conform to `nextstrain/ncov`. Note that an assembly must pass __both__ `--maxNs` and `--minLength` to pass filters.
+
+### `--maxNs`
+Specify the maximum number of N characters allowed for an assembly to pass filters.
+
+```bash
+--maxNs 6000
+```
+
+By default, set to `6000`. Note that an assembly must pass __both__ `--maxNs` and `--minLength` to pass filters.
+
+### `--clades`
+Specify the tab-separated clades file that contains clade definitions. This file needs to contains the columns `clade`, `gene`, `site`, `alt`. This is normally the same file as found in `nextstrain/ncov`.
+
+```bash
+--clades data/clades.tsv
+```
+
+By default, this is [`data/clades.tsv`](../data/clades.tsv)
+
+### `--gisaid_names`
+This should be a tab-separated file that contains the columns `sample_name`, `gisaid_name`. The file should map sample names, which correspond to the basename of the FASTA file, to GISAID names.
+
+```bash
+--gisaid_names gisaid_names.tsv
+```
+
+### `--qpcr_primers`
+Specify a BED file with qPCR primer locations. This is needed to search for variants in these regions.
+
+```bash
+--qpcr_primers data/qpcr_primers.bed 
+```
+
+By default, this is [`data/qpcr_primers.bed`](../data/qpcr_primers.bed)
+
+### `--sample_vcfs`
+If the samples were run through `czbiohub/sc2-msspe-bioinfo/call_consensus.nf`, then each sample will have a corresponding existing VCF. This can be provided to prevent recomputation.
+
+```bash
+--sample_vcfs path/to/data/*.vcf
+```
 
 ## Reference genomes
 
-The pipeline config files come bundled with paths to the illumina iGenomes reference index files. If running with docker or AWS, the configuration is set up to use the [AWS-iGenomes](https://ewels.github.io/AWS-iGenomes/) resource.
-
-### `--genome` (using iGenomes)
-There are 31 different species supported in the iGenomes references. To run the pipeline, you must specify which to use with the `--genome` flag.
-
-You can find the keys to specify the genomes in the [iGenomes config file](../conf/igenomes.config). Common genomes that are supported are:
-
-* Human
-  * `--genome GRCh37`
-* Mouse
-  * `--genome GRCm38`
-* _Drosophila_
-  * `--genome BDGP6`
-* _S. cerevisiae_
-  * `--genome 'R64-1-1'`
-
-> There are numerous others - check the config file for more.
-
-Note that you can use the same configuration setup to save sets of reference files for your own use, even if they are not part of the iGenomes resource. See the [Nextflow documentation](https://www.nextflow.io/docs/latest/config.html) for instructions on where to save such a file.
-
-The syntax for this reference configuration is as follows:
-
-<!-- TODO nf-core: Update reference genome example according to what is needed -->
-
-```nextflow
-params {
-  genomes {
-    'GRCh37' {
-      fasta   = '<path to the genome fasta file>' // Used if no star index given
-    }
-    // Any number of additional genomes, key is used with --genome
-  }
-}
-```
 
 <!-- TODO nf-core: Describe reference path flags -->
-### `--fasta`
-If you prefer, you can specify the full path to your reference genome when you run the pipeline:
+### `--ref`
+You can specify the full path to your reference genome when you run the pipeline:
 
 ```bash
---fasta '[path to Fasta reference]'
+--ref '[path to Fasta reference]'
 ```
 
-### `--igenomesIgnore`
-Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`.
+By default, the pipeline uses Wuhan-Hu-1, found in the file [`data/MN908947.3.fa`](../data/MN908947.3.fa).
+
+###  `--ref_gb`
+A Genbank reference file is needed to assign clades.
+
+```bash
+--ref_gb '[path to Genbank reference]'
+```
+
+By default, the pipeline uses Wuhan-Hu-1, found in the file [`data/MN908947.3.gb`](../data/MN908947.3.gb)
 
 ## Job resources
 ### Automatic resubmission
@@ -191,16 +235,12 @@ Each step in the pipeline has a default set of requirements for number of CPUs, 
 ### Custom resource requests
 Wherever process-specific requirements are set in the pipeline, the default value can be changed by creating a custom config file. See the files hosted at [`nf-core/configs`](https://github.com/nf-core/configs/tree/master/conf) for examples.
 
-If you are likely to be running `nf-core` pipelines regularly it may be a good idea to request that your custom config file is uploaded to the `nf-core/configs` git repository. Before you do this please can you test that the config file works with your pipeline of choice using the `-c` parameter (see definition below). You can then create a pull request to the `nf-core/configs` repository with the addition of your config file, associated documentation file (see examples in [`nf-core/configs/docs`](https://github.com/nf-core/configs/tree/master/docs)), and amending [`nfcore_custom.config`](https://github.com/nf-core/configs/blob/master/nfcore_custom.config) to include your custom profile.
-
-If you have any questions or issues please send us a message on [Slack](https://nf-co.re/join/slack/).
-
 ## AWS Batch specific parameters
 Running the pipeline on AWS Batch requires a couple of specific parameters to be set according to your AWS Batch configuration. Please use the `-awsbatch` profile and then specify all of the following parameters.
 ### `--awsqueue`
 The JobQueue that you intend to use on AWS Batch.
 ### `--awsregion`
-The AWS region to run your job in. Default is set to `eu-west-1` but can be adjusted to your needs.
+The AWS region to run your job in. Default is set to `us-west-2` but can be adjusted to your needs.
 
 Please make sure to also set the `-w/--work-dir` and `--outdir` parameters to a S3 storage bucket of your choice - you'll get an error message notifying you if you didn't.
 
