@@ -491,7 +491,7 @@ process renameAssemblies {
   """
 }
 if (!params.gisaid_names) {
-  renamed_asm = nextstrain_ch
+  nextstrain_ch.set{renamed_asm}
 }
 
 // Put sample and contextual sequences into one channel
