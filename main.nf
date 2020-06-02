@@ -237,7 +237,8 @@ process assignClades {
     assign_clades.py \
     --sequences ${fasta} \
     --refname ${ref_gb} \
-    --output ${sampleName}.clades 
+    --output ${sampleName}.clades \
+    --clades ${clades}
     """
 }
 
