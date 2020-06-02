@@ -10,6 +10,7 @@ from Bio import SeqIO
 import numpy as np
 from matplotlib import pyplot as plt
 import seaborn as sns
+import pandas as pd
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--sample_name")
@@ -126,9 +127,9 @@ if args.neighborvcf:
     stats = {**stats, **countVCF(args.neighborvcf, 'new_snps', 'new_mnps', 'new_indels', stats)}
 if args.clades:
     stats["clade"] = []
-    with open(args.clades) as f:
-        for line in f:
-            stats["clade"].append(line.strip())
+    clade = pd.read_csv(args.clades, sep='\t')
+    stats["clade"] = clade["clade"].values[0]
+    
 
 with open(args.out_prefix + ".stats.json", "w") as f:
     json.dump(stats, f, indent=2)

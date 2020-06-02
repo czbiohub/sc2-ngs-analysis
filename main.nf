@@ -91,7 +91,7 @@ ch_output_docs = file("$baseDir/docs/output.md", checkIfExists: true)
   .fromPath(params.sample_sequences)
   .ifEmpty { exit 1, "Cannot find any files matching: ${params.sample_sequences}\nNB: Path needs to be enclosed in quotes!" }
   .map {file -> tuple(file.simpleName, file) }
-  .into {blastconsensus_in; realign_fa; stats_fa}
+  .into {blastconsensus_in; realign_fa; assignclades_in; stats_fa}
 
 Channel
   .fromPath(params.sample_sequences)
@@ -214,7 +214,7 @@ else {
 }
 
 // redirect VCFs to assignClades and primer variants
-variants_ch.into {primer_variants_ch; assignclades_in; variants_ch}
+variants_ch.into {primer_variants_ch; variants_ch}
 
 clades = file(params.clades, checkIfExists: true)
 
@@ -225,7 +225,7 @@ process assignClades {
     // Use Nextstrain definitions to assign clades based on mutations
 
     input:
-    tuple(sampleName, path(vcf)) from assignclades_in
+    tuple(sampleName, path(fasta)) from assignclades_in
     path(ref_gb)
     path(clades)
 
@@ -234,9 +234,11 @@ process assignClades {
 
     script:
     """
-    assignclades.py \
-        --reference ${ref_gb} --clades ${clades} \
-        --vcf ${vcf} --sample ${sampleName}
+    assign_clades.py \
+    --sequences ${fasta} \
+    --refname ${ref_gb} \
+    --output ${sampleName}.clades \
+    --clades ${clades}
     """
 }
 
