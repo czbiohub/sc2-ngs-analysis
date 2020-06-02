@@ -22,6 +22,7 @@ if __name__ == '__main__':
     )
     parser.add_argument("--sequences", required=True, help="FASTA file of HA sequences")
     parser.add_argument("--refname", required=True, help="Genbank reference file")
+    parser.add_argument("--clades", required=True)
     parser.add_argument("--output", type=str, default='clade_assignment.tsv', help="tsv file to write clade definitions to")
     parser.add_argument("--keep-temporary-files", action='store_true', help="don't clean up")
     parser.add_argument("--chunk-size", default=10, type=int, help="don't clean up")
@@ -32,7 +33,7 @@ if __name__ == '__main__':
     features = load_features(refname)
     seqs = SeqIO.parse(args.sequences, 'fasta')
     ref = SeqIO.read(refname, 'genbank')
-    clade_designations = read_in_clade_definitions(f"config/clades.tsv")
+    clade_designations = read_in_clade_definitions(args.clades)
 
     log_fname = "clade_assignment.log"
     in_fname = "clade_assignment_tmp.fasta"
