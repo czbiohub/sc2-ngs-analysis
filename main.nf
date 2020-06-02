@@ -25,13 +25,13 @@ def helpMessage() {
       --blast_sequences             FASTA of sequences for BLAST alignment
       --nextstrain_sequences        FASTA of sequences to build a tree with
       --nextstrain_metadata         TSV from GISAID
+      --gisaid_names                TSV to rename samples to public identifiers, need columns sample_name, gisaid_name
       --minLength                   Minimum base pair length to allow assemblies to pass QC (default: ${params.minLength})
       --maxNs                       Max number of Ns to allow assemblies to pass QC (default: ${params.maxNs})
 
     Optional arguments:
       --clades                      TSV with clades from nextstrain (default: ${params.clades})
       --sample_vcfs                 Glob pattern of corresponding VCF files
-      --gisaid_names                TSV to rename samples to public identifiers, need columns sample_name, gisaid_name
       --qpcr_primers                qPCR primer BED file (default: ${params.qpcr_primers})
 
 
@@ -469,9 +469,9 @@ process filterAssemblies {
 }
 
 /*
- * STEP 13 - RENAME TO GISAID NAMES IF PROVIDED
+ * STEP 13 - RENAME TO GISAID NAMES
  */
-gisaid_names = params.gisaid_names ? file(params.gisaid_names, checkIfExists: true) : Channel.empty()
+gisaid_names = file(params.gisaid_names, checkIfExists: true)
 process renameAssemblies {
   publishDir "${params.outdir}", mode: 'copy'
 
@@ -489,9 +489,6 @@ process renameAssemblies {
   """
   rename_samples.py --in_fa ${in_fa} --gisaid_names ${gisaid_names}
   """
-}
-if (!params.gisaid_names) {
-  nextstrain_ch.set{renamed_asm}
 }
 
 // Put sample and contextual sequences into one channel
