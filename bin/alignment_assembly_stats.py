@@ -10,6 +10,7 @@ from Bio import SeqIO
 import numpy as np
 from matplotlib import pyplot as plt
 import seaborn as sns
+import pandas as pd
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--sample_name")
